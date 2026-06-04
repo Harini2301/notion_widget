@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morning Briefings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #FFFFFF;
+    --surface: #F8F9FA;
+    --border: #E9ECEF;
+    --border-strong: #DEE2E6;
+    --text: #212529;
+    --text-muted: #6C757D;
+    --text-faint: #ADB5BD;
+    --accent: #1A1A2E;
+    --spine: #DEE2E6;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  header {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  .tz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+  }
+  .tz-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #22C55E;
+  }
+
+  .section-label {
+    max-width: 680px;
+    margin: 16px auto 0;
+    padding: 0 24px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-label-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .section-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+  }
+
+  .timeline {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 44px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 20px 32px 1fr;
+    gap: 0 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.3s ease forwards;
+  }
+  .item:last-child { border-bottom: none; }
+  .item:nth-child(1){animation-delay:.04s}
+  .item:nth-child(2){animation-delay:.08s}
+  .item:nth-child(3){animation-delay:.12s}
+  .item:nth-child(4){animation-delay:.16s}
+  .item:nth-child(5){animation-delay:.20s}
+  .item:nth-child(6){animation-delay:.24s}
+  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+  .dot-col {
+    display: flex;
+    justify-content: center;
+    padding-top: 3px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    background: var(--bg);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .dot.active { background: var(--accent); border-color: var(--accent); }
+
+  .item:has(.tag-finance)  .dot { border-color: #B91C1C; background: #FEE2E2; }
+  .item:has(.tag-pipeline) .dot { border-color: #15803D; background: #DCFCE7; }
+  .item:has(.tag-site)     .dot { border-color: #C2410C; background: #FFEDD5; }
+  .item:has(.tag-design)   .dot { border-color: #6D28D9; background: #EDE9FE; }
+  .item:has(.tag-weekly)   .dot { border-color: #1D4ED8; background: #DBEAFE; }
+
+  .num-col {
+    display: flex;
+    justify-content: center;
+    padding-top: 1px;
+  }
+  .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    line-height: 1;
+  }
+
+  .row-top {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 3px;
+  }
+  .time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .tag-finance  { background: #FEE2E2; color: #B91C1C; }
+  .tag-pipeline { background: #DCFCE7; color: #15803D; }
+  .tag-site     { background: #FFEDD5; color: #C2410C; }
+  .tag-design   { background: #EDE9FE; color: #6D28D9; }
+  .tag-weekly   { background: #DBEAFE; color: #1D4ED8; }
+
+  .item-title {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+  .item:has(.tag-finance)  .item-title { color: #B91C1C; }
+  .item:has(.tag-pipeline) .item-title { color: #15803D; }
+  .item:has(.tag-site)     .item-title { color: #C2410C; }
+  .item:has(.tag-design)   .item-title { color: #6D28D9; }
+  .item:has(.tag-weekly)   .item-title { color: #1D4ED8; }
+
+  .item-agent {
+    font-size: 11px;
+    color: var(--text-faint);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  footer {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 14px 24px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+  }
+
+  @media (max-width: 480px) {
+    header, .timeline, .section-label, footer { padding-left: 16px; padding-right: 16px; }
+    .timeline::before { left: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Agent Briefings Dashboard</div>
+  <h1>Morning Briefings</h1>
+
+  <div class="tz-badge">
+    <span class="tz-dot"></span>
+    Posted daily 8:00–10:00 AM IST · Empty until first agent run
+  </div>
+</header>
+
+<div class="section-label">
+  <span class="section-label-text">Daily · Morning</span>
+  <span class="section-count">4 entries</span>
+</div>
+<div class="timeline">
+  <div class="item">
+    <div class="dot-col"><div class="dot"></div></div>
+    <div class="num-col"><span class="num">01</span></div>
+    <div class="content">
+      <div class="row-top">
+        <span class="time">08:00</span>
+        <span class="tag tag-finance">Finance</span>
+      </div>
+      <div class="item-title">Overdue Invoices</div>
+      <div class="item-agent">— agent 6 will post overdue invoice alerts here —</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="dot-col"><div class="dot"></div></div>
+    <div class="num-col"><span class="num">02</span></div>
+    <div class="content">
+      <div class="row-top">
+        <span class="time">09:00</span>
+        <span class="tag tag-pipeline">Pipeline</span>
+      </div>
+      <div class="item-title">Lead Follow-ups Due Today</div>
+      <div class="item-agent">— agent 1 will post leads requiring follow-up here —</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="dot-col"><div class="dot"></div></div>
+    <div class="num-col"><span class="num">03</span></div>
+    <div class="content">
+      <div class="row-top">
+        <span class="time">09:30</span>
+        <span class="tag tag-site">Site</span>
+      </div>
+      <div class="item-title">Yesterday's Activity Summary</div>
+      <div class="item-agent">— agent 5 will post the site recap here —</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="dot-col"><div class="dot"></div></div>
+    <div class="num-col"><span class="num">04</span></div>
+    <div class="content">
+      <div class="row-top">
+        <span class="time">10:00</span>
+        <span class="tag tag-design">Design</span>
+      </div>
+      <div class="item-title">Client Approval SLA Alerts</div>
+      <div class="item-agent">— agent 3 will post drawings past 96-hour SLA here —</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">
+  <span class="section-label-text">Daily · End of Day</span>
+  <span class="section-count">1 entry</span>
+</div>
+<div class="timeline">
+  <div class="item">
+    <div class="dot-col"><div class="dot"></div></div>
+    <div class="num-col"><span class="num">05</span></div>
+    <div class="content">
+      <div class="row-top">
+        <span class="time">18:00</span>
+        <span class="tag tag-site">Site</span>
+      </div>
+      <div class="item-title">BOQ Digest</div>
+      <div class="item-agent">— agent 4 will post BOQ items updated today, grouped by project —</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">
+  <span class="section-label-text">Weekly · Monday</span>
+  <span class="section-count">1 entry</span>
+</div>
+<div class="timeline">
+  <div class="item">
+    <div class="dot-col"><div class="dot"></div></div>
+    <div class="num-col"><span class="num">06</span></div>
+    <div class="content">
+      <div class="row-top">
+        <span class="time">08:00</span>
+        <span class="tag tag-weekly">Weekly</span>
+      </div>
+      <div class="item-title">Project Health Report</div>
+      <div class="item-agent">— agent 10 will post the full project health report here every Monday —</div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
