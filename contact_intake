@@ -4,15 +4,21 @@
 <meta charset="UTF-8">
 
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    height: 100vh;
+    height: 60px;
     background: transparent;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
+
   a {
     display: inline-flex;
     align-items: center;
@@ -27,15 +33,20 @@
     text-decoration: none;
     transition: background 0.15s, border-color 0.15s;
   }
+
   a:hover {
     background: #e4e2f5;
     border-color: #9d99d8;
   }
-  .icon { font-size: 16px; }
+
+  .icon {
+    font-size: 16px;
+  }
 </style>
 </head>
+
 <body>
-  <a href="https://app.notion.com/p/5478c05738a783228ea901939f9b1b23?v=1388c05738a782798a67885f1c98feec&source=copy_link" target="_blank">
+  <a href="YOUR_NOTION_LINK_HERE" target="_blank">
     <span class="icon">📥</span>
     Contact Intake
   </a>
