@@ -31,6 +31,7 @@
     font-size: 14px;
     font-weight: 500;
     text-decoration: none;
+    cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
   }
 
@@ -46,9 +47,11 @@
 </head>
 
 <body>
-  <a href="YOUR_NOTION_LINK_HERE" target="_blank">
+
+  <a href="https://app.notion.com/p/5478c05738a783228ea901939f9b1b23?v=1388c05738a782798a67885f1c98feec&source=copy_link" target="_blank">
     <span class="icon">📥</span>
     Contact Intake
   </a>
+
 </body>
 </html>
